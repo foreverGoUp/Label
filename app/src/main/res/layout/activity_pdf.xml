@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kc.activity.openfile.PdfActivity">
+
+    <include layout="@layout/include_head_with_back" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.joanzapata.pdfview.PDFView
+            android:id="@+id/pdfView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_pdf_setting"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/com_blank_nor"
+            android:src="@drawable/home_acti_label_setting_press"
+            android:onClick="onClick" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_pdf_zoom_in"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/com_blank_big"
+            android:src="@drawable/ppt_bigger"
+            android:onClick="onClick" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_pdf_zoom_out"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/com_blank_big"
+            android:src="@drawable/ppt_smaller"
+            android:onClick="onClick" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_pdf_zoom_reset"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/com_blank_big"
+            android:src="@drawable/pdf_zoom_reset"
+            android:onClick="onClick" />
+    </RelativeLayout>
+</LinearLayout>

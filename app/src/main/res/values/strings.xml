@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">智能标签</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dir_db_readme">该目录是存放db.json文件和格式必须为**.db格式数据库文件的位置</string>
+
+    <string-array name="db_names">
+        <item>范庄村</item>
+        <item>郁桥变</item>
+    </string-array>
+</resources>

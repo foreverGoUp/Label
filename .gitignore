@@ -6,3 +6,5 @@
 .DS_Store
 /build
 /captures
+/app/src/main/assets/db/db.json
+/app/src/main/assets/db/fzc.sqlite

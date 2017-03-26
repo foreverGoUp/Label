@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1296db</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="com_dividing_line">#ccc</color>
+
+    <color name="com_gray_bg">#ddd</color>
+    <color name="com_gray_text">#808080</color>
+</resources>

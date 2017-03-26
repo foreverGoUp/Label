@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kc.fragment.HomeSearchFragment">
+
+    <EditText
+        android:id="@+id/et_search_content"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:hint="请输入要搜索的文字" />
+
+    <Button
+        android:id="@+id/bt_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="搜索" />
+
+    <Button
+        android:id="@+id/bt_search_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="取消" />
+</LinearLayout>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kc.activity.HomeActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/com_title_ht"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/tv_home_acti_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="标签"
+            android:textColor="#fff"
+            android:textSize="@dimen/com_text_size_big" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rLayout_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ccc" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/com_title_ht"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:id="@+id/llayout_home_label_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:clickable="true"
+            android:onClick="onClick">
+
+            <ImageView
+                android:id="@+id/iv_label_label"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/selector_home_acti_label_label"
+                android:duplicateParentState="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="标签"
+                android:textColor="@drawable/selector_home_tab_text_color" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llayout_home_label_docu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:clickable="true"
+            android:onClick="onClick">
+
+            <ImageView
+                android:id="@+id/iv_label_doc"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/selector_home_acti_label_doc"
+                android:duplicateParentState="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="文档"
+                android:textColor="@drawable/selector_home_tab_text_color" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_home_label_scan"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:src="@drawable/selector_home_acti_label_scan"
+            android:onClick="onClick" />
+
+        <LinearLayout
+            android:id="@+id/llayout_home_label_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:clickable="true"
+            android:onClick="onClick">
+
+            <ImageView
+                android:id="@+id/iv_label_search"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/selector_home_acti_label_search"
+                android:duplicateParentState="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="搜索"
+                android:textColor="@drawable/selector_home_tab_text_color" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llayout_home_label_setting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:clickable="true"
+            android:onClick="onClick">
+
+            <ImageView
+                android:id="@+id/iv_label_setting"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/selector_home_acti_label_setting"
+                android:duplicateParentState="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:textColor="@drawable/selector_home_tab_text_color" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
