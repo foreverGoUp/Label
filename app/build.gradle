@@ -30,9 +30,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:support-v4:25.2.0'
     compile 'org.greenrobot:greendao:3.2.0'
-    compile 'com.google.zxing:core:3.2.1'
-    compile 'com.journeyapps:zxing-android-embedded:3.3.0'
-//    compile 'com.mylhyl:zxingscanner:1.2.1'
+
+//    compile 'com.google.zxing:core:3.2.1'
+//    compile 'com.journeyapps:zxing-android-embedded:3.3.0'
+
+    compile 'com.journeyapps:zxing-android-embedded:3.5.0'
+
     apt 'com.zhy:mpermission-compiler:1.0.0'
     compile 'com.zhy:mpermission-api:1.0.0'
     compile 'com.alibaba:fastjson:1.2.24'

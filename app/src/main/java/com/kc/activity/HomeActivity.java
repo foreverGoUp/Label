@@ -190,10 +190,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 mLLayoutLabelSetting.setSelected(false);
                 break;
             case R.id.iv_home_label_scan:
-//                switchFragment(mScanFragment);
                 mTvTitle.setText("扫描");
-//                Intent intent = new Intent(this, CaptureActivity.class);
-//                startActivityForResult(intent, 1);
                 customScan();
                 break;
             case R.id.llayout_home_label_search:
@@ -231,6 +228,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     // 你可以把这个方法作为一个点击事件
     public void customScan() {
         new IntentIntegrator(this)
+                .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+                .setPrompt("将二维码/条码放入框内，即可自动扫描")//写那句提示的话
                 .setOrientationLocked(false)
                 .setCaptureActivity(CustomScanActivity.class) // 设置自定义的activity是CustomActivity
                 .initiateScan(); // 初始化扫描
