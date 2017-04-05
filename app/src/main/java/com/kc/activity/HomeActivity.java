@@ -34,7 +34,6 @@ import com.zhy.m.permission.PermissionGrant;
 import com.zhy.m.permission.ShowRequestPermissionRationale;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
@@ -97,13 +96,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initData() {
         mTvTitle.setText(DataHandle.getCurDbInfo().getName());
-
-        try {
-            String[] aa = getAssets().list("");
-            int len = aa.length;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void switchFragmentToLabel() {

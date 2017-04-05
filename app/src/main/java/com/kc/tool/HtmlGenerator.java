@@ -96,6 +96,9 @@ public class HtmlGenerator {
                 String cubicleId = cubicle.getCubicleid();
 
                 devices = DataHandle.getDevices4Js(Integer.parseInt(cubicleId));
+                for (int m = 0; m < devices.size(); m++) {
+                    Log.e(TAG, "设备：" + devices.get(m).toString());
+                }
                 cubicle.setDevices(devices);
             }
             room.setCubicles(cubicles);

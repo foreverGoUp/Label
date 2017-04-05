@@ -159,10 +159,10 @@ public class DataHandle {
         String ret = null;
         SQLiteDatabase db = DataCenter.getInstance().getDb(DataHandle.getCurDbFileName());
         if (db != null) {
-            Cursor cursor = db.query("device", new String[]{"device_id", "name"}
+            Cursor cursor = db.query("device", new String[]{"device_id", "description"}
                     , "device_id = ?", new String[]{"" + devId}, null, null, null);
             if (cursor.moveToFirst()) {
-                ret = cursor.getString(cursor.getColumnIndex("name"));
+                ret = cursor.getString(cursor.getColumnIndex("description"));
             }
             cursor.close();
         }
@@ -242,7 +242,7 @@ public class DataHandle {
                     com.kc.bean.dbjs.Device info = new com.kc.bean.dbjs.Device();
                     int DeviceId = cursor.getInt(cursor.getColumnIndex("device_id"));
                     info.setDeviceid("" + DeviceId);
-                    String name = cursor.getString(cursor.getColumnIndex("name"));
+                    String name = cursor.getString(cursor.getColumnIndex("description"));
                     info.setDevicename(name);
 //                    String desc = cursor.getString(cursor.getColumnIndex("description"));
 //                    info.setDescription(desc);
