@@ -190,7 +190,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 mLLayoutLabelSetting.setSelected(false);
                 break;
             case R.id.iv_home_label_scan:
-                mTvTitle.setText("扫描");
+//                mTvTitle.setText("扫描");
                 customScan();
                 break;
             case R.id.llayout_home_label_search:
@@ -245,7 +245,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             } else {
                 // ScanResult 为 获取到的字符串
                 String ScanResult = intentResult.getContents();
-                showToast("扫描成功：" + ScanResult);
+//                showToast("扫描成功：" + ScanResult);
                 Log.e(TAG, "扫描成功：" + ScanResult);
 
                 handleScanResult(ScanResult);
@@ -256,13 +256,51 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void handleScanResult(String result) {
+        if (!checkIsFile(result)) {
+            showToast("格式不正确。扫描结果：" + result);
+            return;
+        }
+        if (!checkFileExist(result)) {
+            showToast("文件不存在。扫描结果：" + result);
+            return;
+        }
         openFile(this, result);
     }
 
-    public static void openFile(Context activity, String fileName) {
-        if (TextUtils.isEmpty(fileName)) {
-            return;
+    public static boolean checkIsFile(String result) {
+        if (TextUtils.isEmpty(result)) {
+            return false;
         }
+        if (!result.contains(".")) {
+            return false;
+        }
+        String fileSuffix = result.substring(result.lastIndexOf(".") + 1).toLowerCase();
+        if (fileSuffix.equals("html")) {
+            String simpleFN = result.substring(0, result.lastIndexOf("."));
+            if (!simpleFN.contains(",")) {
+                return false;
+            }
+            String[] arr = simpleFN.split(",");
+            if (arr == null || arr.length != 3) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+    public static boolean checkFileExist(String fileName) {
+        String fileSuffix = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        if (!fileSuffix.equals("html")) {
+            String fp = FileUtil.getFilePath(FileUtil.DIR_APP_DOC, fileName);
+            if (!new File(fp).exists()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void openFile(Context activity, String fileName) {
         String fileSuffix = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
         Log.d("HomeActivity", "打开文件的后缀:" + fileSuffix);
 
