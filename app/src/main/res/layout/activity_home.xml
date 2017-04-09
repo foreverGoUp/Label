@@ -36,7 +36,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/com_title_ht"
+        android:layout_height="@dimen/com_tab_ht"
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
@@ -52,14 +52,15 @@
 
             <ImageView
                 android:id="@+id/iv_label_label"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/home_acti_tab_img_w"
+                android:layout_height="@dimen/home_acti_tab_img_w"
                 android:src="@drawable/selector_home_acti_label_label"
                 android:duplicateParentState="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/com_blank_xsml"
                 android:text="标签"
                 android:textColor="@drawable/selector_home_tab_text_color" />
         </LinearLayout>
@@ -76,14 +77,15 @@
 
             <ImageView
                 android:id="@+id/iv_label_doc"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/home_acti_tab_img_w"
+                android:layout_height="@dimen/home_acti_tab_img_w"
                 android:src="@drawable/selector_home_acti_label_doc"
                 android:duplicateParentState="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/com_blank_xsml"
                 android:text="文档"
                 android:textColor="@drawable/selector_home_tab_text_color" />
         </LinearLayout>
@@ -108,14 +110,15 @@
 
             <ImageView
                 android:id="@+id/iv_label_search"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/home_acti_tab_img_w"
+                android:layout_height="@dimen/home_acti_tab_img_w"
                 android:src="@drawable/selector_home_acti_label_search"
                 android:duplicateParentState="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/com_blank_xsml"
                 android:text="搜索"
                 android:textColor="@drawable/selector_home_tab_text_color" />
         </LinearLayout>
@@ -132,14 +135,15 @@
 
             <ImageView
                 android:id="@+id/iv_label_setting"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/home_acti_tab_img_w"
+                android:layout_height="@dimen/home_acti_tab_img_w"
                 android:src="@drawable/selector_home_acti_label_setting"
                 android:duplicateParentState="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/com_blank_xsml"
                 android:text="设置"
                 android:textColor="@drawable/selector_home_tab_text_color" />
         </LinearLayout>

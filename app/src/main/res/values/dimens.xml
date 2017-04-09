@@ -4,7 +4,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="com_title_ht">45dp</dimen>
+    <dimen name="com_tab_ht">60dp</dimen>
 
+    <dimen name="com_blank_xsml">3dp</dimen>
     <dimen name="com_blank_sml">5dp</dimen>
     <dimen name="com_blank_nor">10dp</dimen>
     <dimen name="com_blank_mid">15dp</dimen>
@@ -14,5 +16,9 @@
     <dimen name="com_text_size_nor">14sp</dimen>
     <dimen name="com_text_size_mid">17sp</dimen>
     <dimen name="com_text_size_big">20sp</dimen>
+
+
+    <!--HomeA-->
+    <dimen name="home_acti_tab_img_w">25dp</dimen>
 
 </resources>
