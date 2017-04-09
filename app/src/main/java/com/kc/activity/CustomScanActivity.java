@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
@@ -14,10 +14,10 @@ import com.kc.label.R;
 
 public class CustomScanActivity extends BaseActivity implements DecoratedBarcodeView.TorchListener {
 
-    private Button mBtSwichLight;
     private DecoratedBarcodeView mDBV;
     private CaptureManager captureManager;
     private boolean isLightOn = false;
+    private ImageView mIvLight;
 
     @Override
     protected void onPause() {
@@ -64,7 +64,7 @@ public class CustomScanActivity extends BaseActivity implements DecoratedBarcode
 
     @Override
     protected void findViews() {
-        mBtSwichLight = (Button) findViewById(R.id.btn_switch);
+        mIvLight = (ImageView) findViewById(R.id.btn_switch);
         mDBV = (DecoratedBarcodeView) findViewById(R.id.dbv_custom);
     }
 
@@ -74,7 +74,7 @@ public class CustomScanActivity extends BaseActivity implements DecoratedBarcode
 
         // 如果没有闪光灯功能，就去掉相关按钮
         if (!hasFlash()) {
-            mBtSwichLight.setVisibility(View.GONE);
+            mIvLight.setVisibility(View.GONE);
         }
 
     }
@@ -107,8 +107,10 @@ public class CustomScanActivity extends BaseActivity implements DecoratedBarcode
     public void swichLight(View view) {
         if (isLightOn) {
             mDBV.setTorchOff();
+            mIvLight.setSelected(false);
         } else {
             mDBV.setTorchOn();
+            mIvLight.setSelected(true);
         }
     }
 

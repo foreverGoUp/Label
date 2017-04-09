@@ -16,10 +16,14 @@
         app:zxing_use_texture_view="true"
         app:zxing_scanner_layout="@layout/barcode_scanner" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="切换闪光灯"
+    <ImageView
         android:id="@+id/btn_switch"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:padding="20dp"
+        android:src="@drawable/selector_custom_scan_light"
         android:onClick="swichLight" />
 </RelativeLayout>
