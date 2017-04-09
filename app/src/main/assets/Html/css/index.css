@@ -1,0 +1,27 @@
+a{
+ color:gray;
+ }
+ ul{
+ background-color:white;
+ }
+  li{
+     display:block;
+     white-space:nowrap;     //强制不换行
+     overflow:hidden;            //自动隐藏文字
+     text-overflow: ellipsis;    //文字隐藏后添加省略号
+     -o-text-overflow:ellipsis; //适用于opera浏览器
+  }
+  Div{overflow:hidden}
+    div#div1{ 
+position:fixed; 
+top:0; 
+left:0; 
+bottom:0; 
+right:0; 
+z-index:-1; 
+} 
+div#div1 > img { 
+height:100%; 
+width:100%; 
+border:0; 
+} 
