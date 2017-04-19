@@ -3,14 +3,18 @@ package com.kc.fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.kc.base.BaseFragment;
+import com.kc.base.BasePopupWindow;
 import com.kc.data.DataCenter;
 import com.kc.data.DataHandle;
 import com.kc.label.R;
@@ -22,14 +26,15 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class HomeLabelFragment2 extends BaseFragment {
+public class HomeLabelFragment2 extends BaseFragment implements View.OnClickListener {
 
+    private RelativeLayout mRLayoutContainer;
     private WebView mWebView;
     private int mHasReadDbIndex = -1;
     private static final String DEVICE = "device";
     private static final String CABLE = "cable";
     private static final String URL_HEAD = "file:///";
-
+    private String mCurHtmlFilePath = null;
 
     private WebViewClient mWebViewClient = new WebViewClient() {
 
@@ -81,7 +86,9 @@ public class HomeLabelFragment2 extends BaseFragment {
             try {
                 url = URLDecoder.decode(url, "Utf-8");
                 Log.e(TAG, "onPageStarted：" + url);
-                String htmlName = url.substring(url.lastIndexOf("/") + 1);
+
+                mCurHtmlFilePath = url.substring(URL_HEAD.length());
+//                String htmlName = url.substring(url.lastIndexOf("/") + 1);
 //                if (htmlName.contains("index")){
 //                    mWebView.getSettings().setSupportZoom(false);
 //                }
@@ -161,8 +168,14 @@ public class HomeLabelFragment2 extends BaseFragment {
         mWebView.setWebViewClient(mWebViewClient);
     }
 
+    private EditText mEtSearchContent;
     protected void findViews(View view) {
+        mRLayoutContainer = getViewById(view, R.id.rlayout_label_container);
         mWebView = getViewById(view, R.id.webview_home_label_frag_2);
+        mViewSearch = LayoutInflater.from(getActivity()).inflate(R.layout.view_search_dialog, null);
+        mEtSearchContent = getViewById(mViewSearch, R.id.et_search_content);
+        getViewById(mViewSearch, R.id.bt_search_cancel).setOnClickListener(this);
+        getViewById(mViewSearch, R.id.bt_search_ok).setOnClickListener(this);
     }
 
     public boolean backPress() {
@@ -175,6 +188,75 @@ public class HomeLabelFragment2 extends BaseFragment {
     }
 
     public void showSearchArea() {
-        mWebView.loadUrl("javascript:show();");
+        String htmlName = mCurHtmlFilePath.substring(mCurHtmlFilePath.lastIndexOf("/") + 1);
+        Log.e(TAG, "点击搜索时所处页面：" + htmlName);
+        if (htmlName.contains("index")) {
+            mWebView.loadUrl("javascript:show();");
+        } else {
+            showSvgSearchPWindow();
+        }
     }
+
+    private BasePopupWindow mSvgSearchPWindow;
+    private View mViewSearch;
+
+    private void showSvgSearchPWindow() {
+        if (mSvgSearchPWindow == null) {
+            mSvgSearchPWindow = new BasePopupWindow(getActivity());
+            mSvgSearchPWindow.setOutsideTouchable(false);
+            mSvgSearchPWindow.setFocusable(true);
+            mSvgSearchPWindow.setContentView(mViewSearch);
+            mSvgSearchPWindow.setWidth((int) (this.getActivity().getResources().getDisplayMetrics().widthPixels * 0.75));
+        }
+        mSvgSearchPWindow.showAtLocation(mRLayoutContainer, Gravity.CENTER, 0, 0);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.bt_search_ok:
+                String sC = mEtSearchContent.getText().toString();
+                if (sC.equals("")) {
+                    showToast("输入无效");
+                    return;
+                }
+                searchSvgContent(sC);
+
+            case R.id.bt_search_cancel:
+                mSvgSearchPWindow.dismiss();
+                break;
+        }
+    }
+
+    private final String STR_TAG = "</text>";
+    private final String STR_TAG_SUFFIX = ">";
+    private final String STR_WHITE = "white";
+    private final String STR_RED = "red";
+
+    private void searchSvgContent(String sC) {
+        String svgC = FileUtil.read(mCurHtmlFilePath);
+        String[] arr = svgC.split(STR_TAG);
+        int len = arr.length;
+
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < len; i++) {
+            //恢复未搜索状态
+            arr[i] = arr[i].replaceAll(STR_RED, STR_WHITE);
+
+            String text = arr[i].substring(arr[i].lastIndexOf(STR_TAG_SUFFIX) + 1);
+            if (text.contains(sC)) {
+                sb.append(arr[i].replaceAll(STR_WHITE, STR_RED));
+            } else {
+                sb.append(arr[i]);
+            }
+            if (i != len - 1) {
+                sb.append(STR_TAG);
+            }
+        }
+
+        FileUtil.write(mCurHtmlFilePath, sb.toString(), false);
+        Log.e(TAG, "搜索svg完毕");
+        mWebView.loadUrl(URL_HEAD + mCurHtmlFilePath);
+    }
+
 }

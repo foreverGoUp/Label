@@ -27,7 +27,7 @@ public class SvgTool {
     }
 
     public static String drawText(float x, float y, String text) {
-        return "<text x=\"" + x + "\" y=\"" + y + "\" font-size=\"18\" fill =\"black\" font-style=\"italic\">" + text + "</text>";
+        return "<text x=\"" + x + "\" y=\"" + y + "\" font-size=\"18\" fill =\"white\" font-style=\"italic\">" + text + "</text>";
     }
 
 }

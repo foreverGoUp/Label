@@ -225,8 +225,7 @@ public class FileUtil {
         }
     }
 
-    public static String read(String dir, String fileName) {
-        String filePath = getFilePath(dir, fileName);
+    public static String read(String filePath) {
         if (filePath == null) {
             Log.e(TAG, "read-获得文件路径失败...");
             return null;
@@ -253,6 +252,11 @@ public class FileUtil {
         }
 
         return stringBuffer.toString();
+    }
+
+    public static String read(String dir, String fileName) {
+        String filePath = getFilePath(dir, fileName);
+        return read(filePath);
     }
 
     public static String read(InputStream inputStream) {
