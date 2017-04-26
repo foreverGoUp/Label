@@ -26,8 +26,8 @@ public class SvgTool {
         return "<circle cx=\"" + cx + "\" cy=\"" + cy + "\" r=\"3\" fill=\"black\"/>";
     }
 
-    public static String drawText(float x, float y, String text) {
-        return "<text x=\"" + x + "\" y=\"" + y + "\" font-size=\"18\" fill =\"white\" font-style=\"italic\">" + text + "</text>";
+    public static String drawText(float x, float y, String text, String fileDir) {
+        return "<text x=\"" + x + "\" y=\"" + y + "\" font-size=\"18\" fill =\"white\" font-style=\"italic\" onclick=\"self.location.href='file:///" + fileDir + "'\">" + text + "</text>";
     }
 
 }

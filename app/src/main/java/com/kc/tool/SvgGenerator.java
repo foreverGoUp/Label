@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.kc.bean.InfoSet;
 import com.kc.data.DataHandle;
+import com.kc.util.AppConstants;
 
 import java.util.List;
 
@@ -69,14 +70,17 @@ public class SvgGenerator {
             sb.append(SvgTool.drawLine(xOri + wRect, y, xRect2, y));
         }
 
-        sb.append(SvgTool.drawText(xOri + BLANK_SML, yOri + BLANK_XBIG, "才哥是"))
-                .append(SvgTool.drawText(xRect2 + BLANK_SML, yRect2 + BLANK_XBIG, "帅才"))
+        sb.append(SvgTool.drawText(xOri + BLANK_SML, yOri + BLANK_XBIG, "才哥是", "abc"))
+                .append(SvgTool.drawText(xRect2 + BLANK_SML, yRect2 + BLANK_XBIG, "帅才", "abc"))
                 .append(SVG_END);
 
         return sb.toString();
     }
 
-    public static String getSvg(int devId) {
+    /**
+     * @param fileDir 格式为：/0/storage/...
+     */
+    public static String getSvg(int devId, String fileDir) {
         List<InfoSet> infoSets = DataHandle.getInfoSets(devId);
         if (infoSets.size() == 0) {
             return null;
@@ -91,27 +95,29 @@ public class SvgGenerator {
 
             if (infoSet.getTxiedId() != 0) {
                 float y = Y_ORI + i * (H_RECT + V_BLANK);
-                sb.append(SvgTool.drawRect(X_ORI, y, W_RECT, H_RECT));
+                sb.append(SvgTool.drawRect(X_ORI, y, W_RECT, H_RECT));//画矩形
 
                 String text = DataHandle.getDeviceName(infoSet.getTxiedId());
                 Log.d(TAG, "svg line:" + i + ", txiedId:" + infoSet.getTxiedId() + ", name:" + text);
                 float y1 = y + H_RECT / 2;
-                sb.append(SvgTool.drawText(X_ORI + BLANK_SML, y1, text));
+                String fDir = new StringBuffer().append(fileDir).append(AppConstants.DEVICE).append(infoSet.getTxiedId()).append(AppConstants.SUFFIX_HTML).toString();
+                sb.append(SvgTool.drawText(X_ORI + BLANK_SML, y1, text, fDir));//画文本
             } else {
                 continue;
             }
             if (infoSet.getRxiedId() != 0) {
                 float x = X_ORI + W_RECT + H_BLANK;
                 float y = Y_ORI + i * (H_RECT + V_BLANK);
-                sb.append(SvgTool.drawRect(x, y, W_RECT, H_RECT));
+                sb.append(SvgTool.drawRect(x, y, W_RECT, H_RECT));//画矩形
 
                 String text = DataHandle.getDeviceName(infoSet.getRxiedId());
                 Log.d(TAG, "svg line:" + i + ", RxiedId:" + infoSet.getRxiedId() + ", name:" + text);
                 float y0 = y + H_RECT / 2;
-                sb.append(SvgTool.drawText(x + BLANK_SML, y0, text));
+                String fDir = new StringBuffer().append(fileDir).append(AppConstants.DEVICE).append(infoSet.getTxiedId()).append(AppConstants.SUFFIX_HTML).toString();
+                sb.append(SvgTool.drawText(x + BLANK_SML, y0, text, fDir));//画文本
                 //画箭头
                 float y1 = y + H_RECT / 2;
-                sb.append(SvgTool.drawLine(x - H_BLANK, y1, x, y1));
+                sb.append(SvgTool.drawLine(x - H_BLANK, y1, x, y1));//画线
 
             } else {
                 continue;
@@ -124,7 +130,8 @@ public class SvgGenerator {
                 String text = DataHandle.getDeviceName(infoSet.getSwitch1Id());
                 Log.d(TAG, "svg line:" + i + ", Switch1Id:" + infoSet.getSwitch1Id() + ", name:" + text);
                 float y0 = y + H_RECT / 2;
-                sb.append(SvgTool.drawText(x + BLANK_SML, y0, text));
+                String fDir = new StringBuffer().append(fileDir).append(AppConstants.DEVICE).append(infoSet.getTxiedId()).append(AppConstants.SUFFIX_HTML).toString();
+                sb.append(SvgTool.drawText(x + BLANK_SML, y0, text, fDir));
                 //画箭头
                 float y1 = y + H_RECT / 2;
                 sb.append(SvgTool.drawLine(x - H_BLANK, y1, x, y1));
@@ -140,7 +147,8 @@ public class SvgGenerator {
                 String text = DataHandle.getDeviceName(infoSet.getSwitch2Id());
                 Log.d(TAG, "svg line:" + i + ", Switch2Id:" + infoSet.getSwitch2Id() + ", name:" + text);
                 float y0 = y + H_RECT / 2;
-                sb.append(SvgTool.drawText(x + BLANK_SML, y0, text));
+                String fDir = new StringBuffer().append(fileDir).append(AppConstants.DEVICE).append(infoSet.getTxiedId()).append(AppConstants.SUFFIX_HTML).toString();
+                sb.append(SvgTool.drawText(x + BLANK_SML, y0, text, fDir));
                 //画箭头
                 float y1 = y + H_RECT / 2;
                 sb.append(SvgTool.drawLine(x - H_BLANK, y1, x, y1));
@@ -156,7 +164,8 @@ public class SvgGenerator {
                 String text = DataHandle.getDeviceName(infoSet.getSwitch3Id());
                 Log.d(TAG, "svg line:" + i + ", Switch3Id:" + infoSet.getSwitch3Id() + ", name:" + text);
                 float y0 = y + H_RECT / 2;
-                sb.append(SvgTool.drawText(x + BLANK_SML, y0, text));
+                String fDir = new StringBuffer().append(fileDir).append(AppConstants.DEVICE).append(infoSet.getTxiedId()).append(AppConstants.SUFFIX_HTML).toString();
+                sb.append(SvgTool.drawText(x + BLANK_SML, y0, text, fDir));
                 //画箭头
                 float y1 = y + H_RECT / 2;
                 sb.append(SvgTool.drawLine(x - H_BLANK, y1, x, y1));
@@ -172,7 +181,8 @@ public class SvgGenerator {
                 String text = DataHandle.getDeviceName(infoSet.getSwitch4Id());
                 Log.d(TAG, "svg line:" + i + ", Switch4Id:" + infoSet.getSwitch4Id() + ", name:" + text);
                 float y0 = y + H_RECT / 2;
-                sb.append(SvgTool.drawText(x + BLANK_SML, y0, text));
+                String fDir = new StringBuffer().append(fileDir).append(AppConstants.DEVICE).append(infoSet.getTxiedId()).append(AppConstants.SUFFIX_HTML).toString();
+                sb.append(SvgTool.drawText(x + BLANK_SML, y0, text, fDir));
                 //画箭头
                 float y1 = y + H_RECT / 2;
                 sb.append(SvgTool.drawLine(x - H_BLANK, y1, x, y1));

@@ -12,4 +12,9 @@ public class AppConstants {
     public static final String KEY_CUBICLE_ID = "cubicle_id";
     public static final String KEY_HEAD = "head";
     public static final String KEY_FILE_NAME = "file_name";
+
+    public static final String DEVICE = "device";
+    public static final String CABLE = "cable";
+    public static final String URL_HEAD = "file:///";
+    public static final String SUFFIX_HTML = ".html";
 }

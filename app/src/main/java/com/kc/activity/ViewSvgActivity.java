@@ -88,7 +88,8 @@ public class ViewSvgActivity extends BaseActivity {
             if (!new File(fp).exists()) {
                 String ids = mFileName.substring(0, mFileName.lastIndexOf("."));
                 String[] arr = ids.split(",");
-                String content = SvgGenerator.getSvg(Integer.parseInt(arr[2]));
+                String fDir = FileUtil.getFilePath(childDir, null);
+                String content = SvgGenerator.getSvg(Integer.parseInt(arr[2]), fDir);
                 if (content == null) {
                     showToast("数据库中不存在该设备的关系");
                     finish();

@@ -10,6 +10,16 @@ public class Cubicle {
     private String name;
     private String number;
 
+    @Override
+    public String toString() {
+        return "Cubicle{" +
+                "cubicleId=" + cubicleId +
+                ", roomId=" + roomId +
+                ", name='" + name + '\'' +
+                ", number='" + number + '\'' +
+                '}';
+    }
+
     public int getCubicleId() {
         return cubicleId;
     }

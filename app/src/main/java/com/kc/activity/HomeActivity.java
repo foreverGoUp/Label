@@ -62,9 +62,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         findViews();
         init();
         initData();
-
-        String sdf = "fill =\"gray\"";
-        Log.e(TAG, sdf.replaceAll("gray", "red"));
     }
 
     @Override

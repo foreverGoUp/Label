@@ -20,6 +20,7 @@ import com.kc.data.DataHandle;
 import com.kc.label.R;
 import com.kc.tool.HtmlGenerator;
 import com.kc.tool.SvgGenerator;
+import com.kc.util.AppConstants;
 import com.kc.util.FileUtil;
 
 import java.io.File;
@@ -31,9 +32,6 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
     private RelativeLayout mRLayoutContainer;
     private WebView mWebView;
     private int mHasReadDbIndex = -1;
-    private static final String DEVICE = "device";
-    private static final String CABLE = "cable";
-    private static final String URL_HEAD = "file:///";
     private String mCurHtmlFilePath = null;
 
     private WebViewClient mWebViewClient = new WebViewClient() {
@@ -47,15 +45,16 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
                 Log.e(TAG, "webview跳转页面：" + url);
 
                 String htmlName = url.substring(url.lastIndexOf("/") + 1);
-                String fp = url.substring(URL_HEAD.length());
+                String fp = url.substring(AppConstants.URL_HEAD.length());
                 Log.e(TAG, "fp=" + fp);
-                if (htmlName.contains(DEVICE)) {
-                    String devId = htmlName.substring(DEVICE.length(), htmlName.lastIndexOf("."));
+                if (htmlName.contains(AppConstants.DEVICE)) {
+                    String devId = htmlName.substring(AppConstants.DEVICE.length(), htmlName.lastIndexOf("."));
                     Log.e(TAG, "devId=" + devId);
 
                     File file = new File(fp);
                     if (!file.exists()) {
-                        String con = SvgGenerator.getSvg(Integer.parseInt(devId));
+                        String fDir = fp.substring(0, fp.lastIndexOf(File.separator) + 1);
+                        String con = SvgGenerator.getSvg(Integer.parseInt(devId), fDir);
                         if (con == null) {
                             showToast("数据库中无此设备的关系");
                         } else {
@@ -69,7 +68,7 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
                     }
 
                 } else {
-                    String cableId = htmlName.substring(CABLE.length(), htmlName.lastIndexOf("."));
+                    String cableId = htmlName.substring(AppConstants.CABLE.length(), htmlName.lastIndexOf("."));
                     Log.e(TAG, "cableId=" + cableId);
                 }
 
@@ -87,7 +86,7 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
                 url = URLDecoder.decode(url, "Utf-8");
                 Log.e(TAG, "onPageStarted：" + url);
 
-                mCurHtmlFilePath = url.substring(URL_HEAD.length());
+                mCurHtmlFilePath = url.substring(AppConstants.URL_HEAD.length());
 //                String htmlName = url.substring(url.lastIndexOf("/") + 1);
 //                if (htmlName.contains("index")){
 //                    mWebView.getSettings().setSupportZoom(false);
@@ -256,7 +255,7 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
 
         FileUtil.write(mCurHtmlFilePath, sb.toString(), false);
         Log.e(TAG, "搜索svg完毕");
-        mWebView.loadUrl(URL_HEAD + mCurHtmlFilePath);
+        mWebView.loadUrl(AppConstants.URL_HEAD + mCurHtmlFilePath);
     }
 
 }
