@@ -22,7 +22,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/com_blank_sml"
+            android:layout_marginLeft="@dimen/com_blank_nor"
+            android:textColor="#000"
             android:text="选择数据库" />
 
         <View
@@ -50,4 +51,48 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/com_dividing_line" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/com_blank_nor"
+        android:background="@color/com_dividing_line" />
+
+    <LinearLayout
+        android:id="@+id/llayout_setting_clear"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#fff">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/com_blank_nor"
+            android:textColor="#000"
+            android:text="清空缓存" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="@dimen/com_blank_nor"
+            android:src="@drawable/com_next" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/com_dividing_line" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/com_blank_nor"
+        android:text="清空缓存之后网页内容会从数据库中重新生成,建议在数据库中数据改变后进行此操作。" />
 </LinearLayout>

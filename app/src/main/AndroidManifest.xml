@@ -26,10 +26,11 @@
         <activity android:name="com.kc.activity.CubicleListActivity" />
         <activity android:name="com.kc.activity.DeviceListActivity" />
         <activity android:name="com.kc.activity.CustomScanActivity" />
-        <activity android:name="com.kc.activity.WelcomeActivity"></activity>
+        <activity android:name="com.kc.activity.WelcomeActivity" />
         <activity android:name="com.kc.activity.openfile.PdfActivity" />
         <activity android:name="com.kc.activity.openfile.PPTActivity" />
         <activity android:name="com.kc.activity.ViewSvgActivity" />
+        <activity android:name="com.kc.activity.ClearCacheActivity"></activity>
     </application>
 
 </manifest>
