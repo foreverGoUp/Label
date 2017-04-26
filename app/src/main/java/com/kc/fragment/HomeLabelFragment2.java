@@ -136,7 +136,7 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
         mHasReadDbIndex = DataCenter.sCurDbIndex;
 
         String curDbName = DataHandle.getCurDbInfo().getName();
-        String dir = new StringBuffer().append("Html/page/").append(curDbName).append("/").toString();
+        String dir = new StringBuffer().append(FileUtil.DIR_APP_HTML_PAGE).append(curDbName).append("/").toString();
         String fp = FileUtil.getFilePath(dir, "index.html");
         File file = new File(fp);
         if (!file.exists()) {

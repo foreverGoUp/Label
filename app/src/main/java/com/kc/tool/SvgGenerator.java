@@ -197,6 +197,10 @@ public class SvgGenerator {
         return sb.toString();
     }
 
+    public static String getCableSvg() {
+        return null;
+    }
+
     private static String getSvgStart(float w, float h) {
         return "<svg width=\"" + w + "\" height=\"" + h + "\" version=\"1.1\"\n" +
                 "xmlns=\"http://www.w3.org/2000/svg\">" +

@@ -27,6 +27,7 @@ import com.kc.fragment.HomeScanFragment;
 import com.kc.fragment.HomeSearchFragment;
 import com.kc.fragment.HomeSettingFragment;
 import com.kc.label.R;
+import com.kc.util.AppConstants;
 import com.kc.util.FileUtil;
 import com.kc.util.MyApp;
 import com.zhy.m.permission.PermissionDenied;
@@ -263,37 +264,44 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         if (TextUtils.isEmpty(result)) {
             return false;
         }
-        if (!result.contains(".")) {
-            return false;
-        }
-        String fileSuffix = result.substring(result.lastIndexOf(".") + 1).toLowerCase();
-        if (fileSuffix.equals("html")) {
-            String simpleFN = result.substring(0, result.lastIndexOf("."));
-            if (!simpleFN.contains(",")) {
-                return false;
-            }
-            String[] arr = simpleFN.split(",");
-            if (arr == null || arr.length != 3) {
-                return false;
-            }
-
-        }
+//        if (!result.contains(".")) {
+//            return false;
+//        }
+//        String fileSuffix = result.substring(result.lastIndexOf(".") + 1).toLowerCase();
+//        if (fileSuffix.equals("html")) {
+//            String simpleFN = result.substring(0, result.lastIndexOf("."));
+//            if (!simpleFN.contains(",")) {
+//                return false;
+//            }
+//            String[] arr = simpleFN.split(",");
+//            if (arr == null || arr.length != 3) {
+//                return false;
+//            }
+//
+//        }
         return true;
     }
 
     public static boolean checkFileExist(String fileName) {
         String fileSuffix = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-        if (!fileSuffix.equals("html")) {
+
+        if (!fileSuffix.contains(AppConstants.DEVICE) && !fileSuffix.contains(AppConstants.CABLE)) {
             String fp = FileUtil.getFilePath(FileUtil.DIR_APP_DOC, fileName);
             if (!new File(fp).exists()) {
                 return false;
             }
+        } else {
+            Log.e("HomeActi checkFileExist", "检查文件是否存在时判断得出该文件名为网页文件：" + fileName);
         }
         return true;
     }
 
     public static void openFile(Context activity, String fileName) {
         String fileSuffix = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        if (fileSuffix.contains(AppConstants.DEVICE) || fileSuffix.contains(AppConstants.CABLE)) {
+            ViewSvgActivity.actionStart(activity, fileName);
+            return;
+        }
         Log.d("HomeActivity", "打开文件的后缀:" + fileSuffix);
 
         switch (fileSuffix) {

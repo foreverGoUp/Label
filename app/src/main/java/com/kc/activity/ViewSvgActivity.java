@@ -3,10 +3,12 @@ package com.kc.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.kc.base.BaseActivity;
@@ -17,12 +19,80 @@ import com.kc.util.AppConstants;
 import com.kc.util.FileUtil;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 public class ViewSvgActivity extends BaseActivity {
 
     private WebView mWebView;
+    private TextView mTvHead;
 
     private String mFileName;
+
+    private WebViewClient mWebViewClient = new WebViewClient() {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//            Log.e(TAG,"shouldOverrideUrlLoading:"+url);
+
+            try {
+                url = URLDecoder.decode(url, "Utf-8");
+                Log.e(TAG, "webview跳转页面：" + url);
+
+                String htmlName = url.substring(url.lastIndexOf("/") + 1);
+                String fp = url.substring(AppConstants.URL_HEAD.length());
+                Log.e(TAG, "fp=" + fp);
+                if (htmlName.contains(AppConstants.DEVICE)) {
+                    String devId = htmlName.substring(AppConstants.DEVICE.length(), htmlName.lastIndexOf("."));
+                    Log.e(TAG, "devId=" + devId);
+
+                    File file = new File(fp);
+                    if (!file.exists()) {
+                        String fDir = fp.substring(0, fp.lastIndexOf(File.separator) + 1);
+                        String con = SvgGenerator.getSvg(Integer.parseInt(devId), fDir);
+                        if (con == null) {
+                            showToast("数据库中无此设备的关系");
+                        } else {
+                            FileUtil.write(fp, con, false);
+//                            mWebView.getSettings().setSupportZoom(true);
+                            view.loadUrl(url);
+                            Log.e(TAG, "创建文件：" + fp);
+                        }
+                    } else {
+                        view.loadUrl(url);
+                    }
+
+                } else {
+                    String cableId = htmlName.substring(AppConstants.CABLE.length(), htmlName.lastIndexOf("."));
+                    Log.e(TAG, "cableId=" + cableId);
+                }
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            return true;
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+
+            try {
+                url = URLDecoder.decode(url, "Utf-8");
+                Log.e(TAG, "onPageStarted：" + url);
+                String fileName = url.substring(url.lastIndexOf(File.separator) + 1);
+                mTvHead.setText(fileName);
+//                mCurHtmlFilePath = url.substring(AppConstants.URL_HEAD.length());
+//                String htmlName = url.substring(url.lastIndexOf("/") + 1);
+//                if (htmlName.contains("index")){
+//                    mWebView.getSettings().setSupportZoom(false);
+//                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            super.onPageStarted(view, url, favicon);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +104,18 @@ public class ViewSvgActivity extends BaseActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (mWebView.canGoBack()) {
+            mWebView.goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     protected void findViews() {
         mWebView = getViewById(R.id.webview);
+        mTvHead = getViewById(R.id.tv_head);
     }
 
     @Override
@@ -49,6 +129,7 @@ public class ViewSvgActivity extends BaseActivity {
         settings.setSupportMultipleWindows(true);
         settings.setDefaultTextEncodingName("UTF-8");
         mWebView.setInitialScale(75);
+        mWebView.setWebViewClient(mWebViewClient);
 
 //        mWebView.setWebViewClient(new WebViewClient(){
 //            @Override
@@ -69,29 +150,40 @@ public class ViewSvgActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        TextView tvHead = getViewById(R.id.tv_head);
         if (mFileName == null) {
             finish();
             return;
         }
+        final String fileName = mFileName;
 
-        tvHead.setText(mFileName);
+        mTvHead.setText(fileName);
 
-        String suffix = mFileName.substring(mFileName.lastIndexOf(".") + 1).toLowerCase();
+        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
         String fp = null;
-        if (suffix.equals("html")) {
-            String dbName = DataHandle.getCurDbInfo().getFile();
-            String childDir = FileUtil.DIR_APP_SVG + dbName + "/";
-            fp = FileUtil.getFilePath(childDir, mFileName);
+        if (suffix.contains(AppConstants.DEVICE) || suffix.contains(AppConstants.CABLE)) {
+            String curDbName = DataHandle.getCurDbInfo().getName();
+            String childDir = new StringBuffer().append(FileUtil.DIR_APP_HTML_PAGE).append(curDbName).append("/").toString();
+            fp = FileUtil.getFilePath(childDir, fileName + AppConstants.SUFFIX_HTML);//文件名格式为：device12或cable10
             Log.e(TAG, "fp=" + fp);
 
             if (!new File(fp).exists()) {
-                String ids = mFileName.substring(0, mFileName.lastIndexOf("."));
-                String[] arr = ids.split(",");
+//                String ids = mFileName.substring(0, mFileName.lastIndexOf("."));
+//                String[] arr = ids.split(",");
                 String fDir = FileUtil.getFilePath(childDir, null);
-                String content = SvgGenerator.getSvg(Integer.parseInt(arr[2]), fDir);
+                String content = null;
+                if (suffix.contains(AppConstants.DEVICE)) {
+                    String devId = fileName.substring(AppConstants.DEVICE.length());
+                    content = SvgGenerator.getSvg(Integer.parseInt(devId), fDir);
+                } else {
+                    String cableId = fileName.substring(AppConstants.CABLE.length());
+                    content = SvgGenerator.getCableSvg();
+                }
                 if (content == null) {
-                    showToast("数据库中不存在该设备的关系");
+                    if (suffix.contains(AppConstants.DEVICE)) {
+                        showToast("数据库中不存在该设备的关系");
+                    } else {
+                        showToast("数据库中的柜关系图未开放");
+                    }
                     finish();
                     return;
                 }

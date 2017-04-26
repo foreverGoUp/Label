@@ -39,7 +39,8 @@ public class FileUtil {
     public static final String DIR_APP_SCREENSHOT = "ScreenShot/";
     public static final String DIR_APP_DATABASE = "Database/";
     public static final String DIR_APP_DOC = "Doc/";
-    public static final String DIR_APP_SVG = "Svg/";
+    public static final String DIR_APP_HTML_PAGE = "Html/page/";
+    //    public static final String DIR_APP_SVG = "Svg/";
     //
     //固定目录标识
     public static final int DIR_FLAG_DOWNLOADS = 0;
