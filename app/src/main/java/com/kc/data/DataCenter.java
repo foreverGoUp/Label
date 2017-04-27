@@ -54,6 +54,7 @@ public class DataCenter {
     public void init() {
         Log.e(TAG, "开始初始化！！！");
         String content = FileUtil.read(FileUtil.DIR_APP_DATABASE, "db.json");
+        Log.e(TAG, "从存储文件中读到数据库信息:" + content);
         if (TextUtils.isEmpty(content)) {
             InputStream is = null;
             try {
@@ -62,6 +63,9 @@ public class DataCenter {
                 e.printStackTrace();
             }
             content = FileUtil.read(is);
+            Log.e(TAG, "从assets中读到数据库信息:" + content);
+        } else {
+            Log.e(TAG, "从存储文件中读到数据库信息:" + content);
         }
 
         if (!TextUtils.isEmpty(content)) {
@@ -76,6 +80,8 @@ public class DataCenter {
                     mDbInfos.add(info);
                 }
             }
+        } else {
+            Log.e(TAG, "初始化时读取数据库信息失败！！！");
         }
     }
 
@@ -88,6 +94,9 @@ public class DataCenter {
 //    }
 
     public List<DbInfo> getDbInfos() {
+        if (mDbInfos == null) {
+            mDbInfos = new ArrayList<>();
+        }
         return mDbInfos;
     }
 

@@ -57,7 +57,7 @@ public class HomeSettingFragment extends BaseFragment implements View.OnClickLis
         CommonAdapter adapter = new CommonAdapter<DbInfo>(getActivity(), list, android.R.layout.simple_spinner_dropdown_item) {
 
             @Override
-            public void convert(ViewHolder helper, DbInfo item) {
+            public void convert(ViewHolder helper, DbInfo item, int pos) {
                 helper.setText(android.R.id.text1, item.getName());
             }
         };

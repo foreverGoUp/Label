@@ -71,7 +71,7 @@ public class DeviceListActivity extends BaseActivity {
         mlist = getList(mCubicleId);
         mAdapter = new CommonAdapter<Device>(this, mlist, R.layout.list_item_room) {
             @Override
-            public void convert(ViewHolder helper, Device item) {
+            public void convert(ViewHolder helper, Device item, int position) {
                 String text = item.getName() + "\n" + item.getDescription();
                 TextView view = helper.getView(R.id.tv_list_item_room_name);
                 if (DataCenter.sSearchC != null && text.contains(DataCenter.sSearchC)) {

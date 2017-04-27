@@ -68,7 +68,7 @@ public class CubicleListActivity extends BaseActivity {
         mlist = getList(mRoomId);
         mAdapter = new CommonAdapter<Cubicle>(this, mlist, R.layout.list_item_room) {
             @Override
-            public void convert(ViewHolder helper, Cubicle item) {
+            public void convert(ViewHolder helper, Cubicle item, int position) {
                 TextView view = helper.getView(R.id.tv_list_item_room_name);
                 if (DataCenter.sSearchC != null && item.getName().contains(DataCenter.sSearchC)) {
                     view.setTextColor(Color.parseColor("#ff0000"));
