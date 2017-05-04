@@ -25,4 +25,15 @@
         android:textSize="@dimen/com_text_size_big"
         android:textColor="#fff"
         android:layout_centerInParent="true" />
+
+    <ImageView
+        android:visibility="gone"
+        android:onClick="onClick"
+        android:id="@+id/iv_com_head_search"
+        android:layout_width="@dimen/com_title_ht"
+        android:layout_height="@dimen/com_title_ht"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/com_blank_sml"
+        android:padding="5dp"
+        android:src="@drawable/com_selector_search" />
 </RelativeLayout>

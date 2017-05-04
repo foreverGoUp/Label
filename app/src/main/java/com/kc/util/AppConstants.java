@@ -19,4 +19,11 @@ public class AppConstants {
     public static final String INDEX_HTML = "index.html";
 
     public static final String SUFFIX_HTML = ".html";
+    public static final String SUFFIX_TXT = ".txt";
+
+
+    public static final String STR_TAG = "</text>";
+    public static final String STR_TAG_SUFFIX = ">";
+    public static final String STR_WHITE = "white";
+    public static final String STR_RED = "red";
 }

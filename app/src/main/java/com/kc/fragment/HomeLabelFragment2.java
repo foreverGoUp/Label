@@ -1,6 +1,5 @@
 package com.kc.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.kc.activity.ViewSvgActivity;
 import com.kc.base.BaseFragment;
 import com.kc.base.BasePopupWindow;
 import com.kc.data.DataCenter;
@@ -49,6 +49,14 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
                 Log.e(TAG, "webview跳转页面：" + url);
 
                 String htmlName = url.substring(url.lastIndexOf("/") + 1);
+                //如果打开的是svg页面，则跳转到专门的活动中显示
+                if (!htmlName.equals(AppConstants.INDEX_HTML)) {
+                    String fN = htmlName.substring(0, htmlName.lastIndexOf("."));
+                    Log.e(TAG, "跳转到ViewSvgActivity时传入的文件名：" + fN);
+                    ViewSvgActivity.actionStart(getActivity(), fN);
+                    return true;
+                }
+
                 String fp = url.substring(AppConstants.URL_HEAD.length());
                 Log.e(TAG, "fp=" + fp);
                 if (htmlName.contains(AppConstants.DEVICE)) {
@@ -94,12 +102,12 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
                     mIsIndexPage = false;
                 }
 
-                //请求横屏
-                if (mIsIndexPage) {
-                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                } else {
-                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                }
+//                //请求横屏
+//                if (mIsIndexPage) {
+//                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                } else {
+//                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//                }
 //                String htmlName = url.substring(url.lastIndexOf("/") + 1);
 //                if (htmlName.contains("index")){
 //                    mWebView.getSettings().setSupportZoom(false);
