@@ -48,7 +48,7 @@ public class ViewSvgActivity extends BaseActivity implements View.OnClickListene
                 Log.e(TAG, "webview跳转页面：" + url);
 
                 String htmlName = url.substring(url.lastIndexOf("/") + 1);
-                String suffix = htmlName.substring(htmlName.lastIndexOf(".")).toLowerCase();
+                String suffix = htmlName.substring(htmlName.lastIndexOf(".") + 1).toLowerCase();
                 Log.e(TAG, "shouldOverrideUrlLoading 得到打开文件的后缀：" + suffix);
                 String fp = url.substring(AppConstants.URL_HEAD.length());
                 Log.e(TAG, "fp=" + fp);
@@ -145,7 +145,6 @@ public class ViewSvgActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void init() {
-        getViewById(R.id.iv_com_head_search).setVisibility(View.VISIBLE);
         mRLayoutContainer = getViewById(R.id.rlayout_view_svg_container);
 
         mViewSearch = LayoutInflater.from(this).inflate(R.layout.view_search_dialog, null);
@@ -178,6 +177,12 @@ public class ViewSvgActivity extends BaseActivity implements View.OnClickListene
         mFileName = getIntent().getStringExtra(AppConstants.KEY_FILE_NAME);
         Log.d(TAG, "打开文件:" + mFileName);
 
+        //判断是否显示搜索按钮
+        String suffix = mFileName.substring(mFileName.lastIndexOf(".") + 1);
+        if (!suffix.equals(AppConstants.SUFFIX_TXT)) {
+            getViewById(R.id.iv_com_head_search).setVisibility(View.VISIBLE);
+        }
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
@@ -196,7 +201,7 @@ public class ViewSvgActivity extends BaseActivity implements View.OnClickListene
         if (suffix.contains(AppConstants.DEVICE) || suffix.contains(AppConstants.CABLE)) {
             String curDbName = DataHandle.getCurDbInfo().getName();
             String childDir = new StringBuffer().append(FileUtil.DIR_APP_HTML_PAGE).append(curDbName).append("/").toString();
-            fp = FileUtil.getFilePath(childDir, fileName + AppConstants.SUFFIX_HTML);//文件名格式为：device12或cable10
+            fp = FileUtil.getFilePath(childDir, fileName + AppConstants.STR_POINT + AppConstants.SUFFIX_HTML);//文件名格式为：device12或cable10
             Log.e(TAG, "fp=" + fp);
 
             if (!new File(fp).exists()) {
