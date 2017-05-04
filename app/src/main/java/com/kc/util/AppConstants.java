@@ -16,6 +16,7 @@ public class AppConstants {
     public static final String DEVICE = "device";
     public static final String CABLE = "cable";
     public static final String URL_HEAD = "file:///";
+    public static final String INDEX_HTML = "index.html";
 
     public static final String SUFFIX_HTML = ".html";
 }

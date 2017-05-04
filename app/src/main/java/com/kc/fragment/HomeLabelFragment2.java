@@ -1,5 +1,6 @@
 package com.kc.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,9 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
 
     private WebViewClient mWebViewClient = new WebViewClient() {
 
+        /**
+         * 打开网页时调用
+         */
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 //            Log.e(TAG,"shouldOverrideUrlLoading:"+url);
@@ -48,21 +52,13 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
                 String fp = url.substring(AppConstants.URL_HEAD.length());
                 Log.e(TAG, "fp=" + fp);
                 if (htmlName.contains(AppConstants.DEVICE)) {
-                    String devId = htmlName.substring(AppConstants.DEVICE.length(), htmlName.lastIndexOf("."));
-                    Log.e(TAG, "devId=" + devId);
-
                     File file = new File(fp);
                     if (!file.exists()) {
-                        String fDir = fp.substring(0, fp.lastIndexOf(File.separator) + 1);
-                        String con = SvgGenerator.getSvg(Integer.parseInt(devId), fDir);
-                        if (con == null) {
-                            showToast("数据库中无此设备的关系");
-                        } else {
-                            FileUtil.write(fp, con, false);
-//                            mWebView.getSettings().setSupportZoom(true);
+                        boolean ret = createFile(url);
+                        if (ret){
                             view.loadUrl(url);
-                            Log.e(TAG, "创建文件：" + fp);
                         }
+
                     } else {
                         view.loadUrl(url);
                     }
@@ -79,6 +75,9 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
             return true;
         }
 
+        /**
+         * 打开或回退网页时调用
+         * */
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
@@ -87,6 +86,20 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
                 Log.e(TAG, "onPageStarted：" + url);
 
                 mCurHtmlFilePath = url.substring(AppConstants.URL_HEAD.length());
+
+                String htmlName = url.substring(url.lastIndexOf("/") + 1);
+                if (htmlName.equals(AppConstants.INDEX_HTML)) {
+                    mIsIndexPage = true;
+                } else {
+                    mIsIndexPage = false;
+                }
+
+                //请求横屏
+                if (mIsIndexPage) {
+                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else {
+                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                }
 //                String htmlName = url.substring(url.lastIndexOf("/") + 1);
 //                if (htmlName.contains("index")){
 //                    mWebView.getSettings().setSupportZoom(false);
@@ -97,6 +110,25 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
             super.onPageStarted(view, url, favicon);
         }
     };
+
+    private boolean createFile(String url) {
+        String htmlName = url.substring(url.lastIndexOf("/") + 1);
+        String fp = url.substring(AppConstants.URL_HEAD.length());
+        String devId = htmlName.substring(AppConstants.DEVICE.length(), htmlName.lastIndexOf("."));
+        Log.e(TAG, "devId=" + devId);
+        String fDir = fp.substring(0, fp.lastIndexOf(File.separator) + 1);
+        String con = SvgGenerator.getSvg(Integer.parseInt(devId), fDir);
+        if (con == null) {
+            showToast("数据库中无此设备的关系");
+            return false;
+        } else {
+            FileUtil.write(fp, con, false);
+//                            mWebView.getSettings().setSupportZoom(true);
+//            view.loadUrl(url);
+            Log.e(TAG, "创建文件：" + fp);
+            return true;
+        }
+    }
 
     public HomeLabelFragment2() {
         // Required empty public constructor
@@ -177,9 +209,15 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
         getViewById(mViewSearch, R.id.bt_search_ok).setOnClickListener(this);
     }
 
+    private boolean mIsIndexPage = false;
     public boolean backPress() {
-        if (mWebView.canGoBack()) {
-            mWebView.goBack();
+        if (!mIsIndexPage && mWebView.canGoBack()) {
+            if (DataCenter.sHasClearedCurDbCache) {//清除当前显示的数据库的缓存之后该页面重新初始化网页
+                initData();
+                DataCenter.sHasClearedCurDbCache = false;
+            } else {
+                mWebView.goBack();
+            }
             return true;
         } else {
             return false;
@@ -187,9 +225,10 @@ public class HomeLabelFragment2 extends BaseFragment implements View.OnClickList
     }
 
     public void showSearchArea() {
-        String htmlName = mCurHtmlFilePath.substring(mCurHtmlFilePath.lastIndexOf("/") + 1);
-        Log.e(TAG, "点击搜索时所处页面：" + htmlName);
-        if (htmlName.contains("index")) {
+//        String htmlName = mCurHtmlFilePath.substring(mCurHtmlFilePath.lastIndexOf("/") + 1);
+//        Log.e(TAG, "点击搜索时所处页面：" + htmlName);
+//        if (htmlName.equals(AppConstants.INDEX_HTML)) {
+        if (mIsIndexPage) {
             mWebView.loadUrl("javascript:show();");
         } else {
             showSvgSearchPWindow();
