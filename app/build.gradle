@@ -3,9 +3,16 @@ apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'ckc'
+            keyPassword 'Kc123456'
+            storeFile file('G:/Android Studio/kc/kc.jks')
+            storePassword 'Kc123456'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
-
     defaultConfig {
         applicationId "com.kc.label"
         minSdkVersion 18
@@ -17,9 +24,10 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
         debug {
-            debuggable true
+            debuggable false
         }
     }
 }
@@ -30,12 +38,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:support-v4:25.2.0'
     compile 'org.greenrobot:greendao:3.2.0'
-
-//    compile 'com.google.zxing:core:3.2.1'
-//    compile 'com.journeyapps:zxing-android-embedded:3.3.0'
-
+    //    compile 'com.google.zxing:core:3.2.1'
+    //    compile 'com.journeyapps:zxing-android-embedded:3.3.0'
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
-
     apt 'com.zhy:mpermission-compiler:1.0.0'
     compile 'com.zhy:mpermission-api:1.0.0'
     compile 'com.alibaba:fastjson:1.2.24'
