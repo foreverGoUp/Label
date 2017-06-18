@@ -85,4 +85,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected <T extends View> T getViewById(int id) {
         return (T) findViewById(id);
     }
+
+    protected <T extends View> T getViewById(View view, int id) {
+        return (T) view.findViewById(id);
+    }
 }

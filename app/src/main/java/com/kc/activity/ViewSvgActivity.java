@@ -6,12 +6,18 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kc.base.BaseActivity;
+import com.kc.base.BasePopupWindow;
 import com.kc.data.DataHandle;
 import com.kc.label.R;
 import com.kc.tool.SvgGenerator;
@@ -22,12 +28,14 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class ViewSvgActivity extends BaseActivity {
+public class ViewSvgActivity extends BaseActivity implements View.OnClickListener {
 
+    private RelativeLayout mRLayoutContainer;
     private WebView mWebView;
     private TextView mTvHead;
 
     private String mFileName;
+    private String mCurHtmlFilePath = null;
 
     private WebViewClient mWebViewClient = new WebViewClient() {
 
@@ -40,31 +48,45 @@ public class ViewSvgActivity extends BaseActivity {
                 Log.e(TAG, "webview跳转页面：" + url);
 
                 String htmlName = url.substring(url.lastIndexOf("/") + 1);
+                String suffix = htmlName.substring(htmlName.lastIndexOf(".") + 1).toLowerCase();
+                Log.e(TAG, "shouldOverrideUrlLoading 得到打开文件的后缀：" + suffix);
                 String fp = url.substring(AppConstants.URL_HEAD.length());
                 Log.e(TAG, "fp=" + fp);
-                if (htmlName.contains(AppConstants.DEVICE)) {
-                    String devId = htmlName.substring(AppConstants.DEVICE.length(), htmlName.lastIndexOf("."));
-                    Log.e(TAG, "devId=" + devId);
+                if (suffix.equals(AppConstants.SUFFIX_HTML)) {//svg网页
+                    if (htmlName.contains(AppConstants.DEVICE)) {
+                        String devId = htmlName.substring(AppConstants.DEVICE.length(), htmlName.lastIndexOf("."));
+                        Log.e(TAG, "devId=" + devId);
+                        File file = new File(fp);
+                        if (!file.exists()) {
+                            String fDir = fp.substring(0, fp.lastIndexOf(File.separator) + 1);
+                            String con = SvgGenerator.getSvg(Integer.parseInt(devId), fDir);
+                            if (con == null) {
+                                showToast("数据库中无此设备的关系");
+//                                finish();
 
-                    File file = new File(fp);
-                    if (!file.exists()) {
-                        String fDir = fp.substring(0, fp.lastIndexOf(File.separator) + 1);
-                        String con = SvgGenerator.getSvg(Integer.parseInt(devId), fDir);
-                        if (con == null) {
-                            showToast("数据库中无此设备的关系");
-                        } else {
-                            FileUtil.write(fp, con, false);
+                            } else {
+                                FileUtil.write(fp, con, false);
 //                            mWebView.getSettings().setSupportZoom(true);
+                                view.loadUrl(url);
+                                Log.e(TAG, "创建文件：" + fp);
+                            }
+                        } else {
                             view.loadUrl(url);
-                            Log.e(TAG, "创建文件：" + fp);
                         }
-                    } else {
-                        view.loadUrl(url);
-                    }
 
+                    } else if (htmlName.contains(AppConstants.CABLE)) {
+//                        String cableId = htmlName.substring(AppConstants.CABLE.length(), htmlName.lastIndexOf("."));
+//                        Log.e(TAG, "cableId=" + cableId);
+                        showToast("数据库中的柜关系图未开放");
+//                        finish();
+
+                    } else {
+                        Log.e(TAG, "!!!未处理网页名称：" + url);
+                    }
+                } else if (suffix.equals(AppConstants.SUFFIX_TXT)) {//如果是txt文本
+                    view.loadUrl(url);
                 } else {
-                    String cableId = htmlName.substring(AppConstants.CABLE.length(), htmlName.lastIndexOf("."));
-                    Log.e(TAG, "cableId=" + cableId);
+                    Log.e(TAG, "!!!未处理文件名称：" + url);
                 }
 
             } catch (UnsupportedEncodingException e) {
@@ -80,6 +102,9 @@ public class ViewSvgActivity extends BaseActivity {
             try {
                 url = URLDecoder.decode(url, "Utf-8");
                 Log.e(TAG, "onPageStarted：" + url);
+
+                mCurHtmlFilePath = url.substring(AppConstants.URL_HEAD.length());
+
                 String fileName = url.substring(url.lastIndexOf(File.separator) + 1);
                 mTvHead.setText(fileName);
 //                mCurHtmlFilePath = url.substring(AppConstants.URL_HEAD.length());
@@ -120,6 +145,13 @@ public class ViewSvgActivity extends BaseActivity {
 
     @Override
     protected void init() {
+        mRLayoutContainer = getViewById(R.id.rlayout_view_svg_container);
+
+        mViewSearch = LayoutInflater.from(this).inflate(R.layout.view_search_dialog, null);
+        mEtSearchContent = getViewById(mViewSearch, R.id.et_search_content);
+        getViewById(mViewSearch, R.id.bt_search_cancel).setOnClickListener(this);
+        getViewById(mViewSearch, R.id.bt_search_ok).setOnClickListener(this);
+
         WebSettings settings = mWebView.getSettings();
         settings.setLoadWithOverviewMode(true);
         settings.setJavaScriptEnabled(true);
@@ -145,6 +177,12 @@ public class ViewSvgActivity extends BaseActivity {
         mFileName = getIntent().getStringExtra(AppConstants.KEY_FILE_NAME);
         Log.d(TAG, "打开文件:" + mFileName);
 
+        //判断是否显示搜索按钮
+        String suffix = mFileName.substring(mFileName.lastIndexOf(".") + 1);
+        if (!suffix.equals(AppConstants.SUFFIX_TXT)) {
+            getViewById(R.id.iv_com_head_search).setVisibility(View.VISIBLE);
+        }
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
@@ -163,7 +201,7 @@ public class ViewSvgActivity extends BaseActivity {
         if (suffix.contains(AppConstants.DEVICE) || suffix.contains(AppConstants.CABLE)) {
             String curDbName = DataHandle.getCurDbInfo().getName();
             String childDir = new StringBuffer().append(FileUtil.DIR_APP_HTML_PAGE).append(curDbName).append("/").toString();
-            fp = FileUtil.getFilePath(childDir, fileName + AppConstants.SUFFIX_HTML);//文件名格式为：device12或cable10
+            fp = FileUtil.getFilePath(childDir, fileName + AppConstants.STR_POINT + AppConstants.SUFFIX_HTML);//文件名格式为：device12或cable10
             Log.e(TAG, "fp=" + fp);
 
             if (!new File(fp).exists()) {
@@ -199,5 +237,67 @@ public class ViewSvgActivity extends BaseActivity {
         Intent intent = new Intent(context, ViewSvgActivity.class);
         intent.putExtra(AppConstants.KEY_FILE_NAME, fileName);
         context.startActivity(intent);
+    }
+
+    private EditText mEtSearchContent;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_com_head_search:
+                showSvgSearchPWindow();
+                break;
+            case R.id.bt_search_ok:
+                String sC = mEtSearchContent.getText().toString();
+                if (sC.equals("")) {
+                    showToast("输入无效");
+                    return;
+                }
+                searchSvgContent(sC);
+
+            case R.id.bt_search_cancel:
+                mSvgSearchPWindow.dismiss();
+                break;
+        }
+    }
+
+    private BasePopupWindow mSvgSearchPWindow;
+    private View mViewSearch;
+
+    private void showSvgSearchPWindow() {
+        if (mSvgSearchPWindow == null) {
+            mSvgSearchPWindow = new BasePopupWindow(this);
+            mSvgSearchPWindow.setOutsideTouchable(false);
+            mSvgSearchPWindow.setFocusable(true);
+            mSvgSearchPWindow.setContentView(mViewSearch);
+            mSvgSearchPWindow.setWidth((int) (this.getResources().getDisplayMetrics().widthPixels * 0.75));
+        }
+        mSvgSearchPWindow.showAtLocation(mRLayoutContainer, Gravity.CENTER, 0, 0);
+    }
+
+    private void searchSvgContent(String sC) {
+        String svgC = FileUtil.read(mCurHtmlFilePath);
+        String[] arr = svgC.split(AppConstants.STR_TAG);
+        int len = arr.length;
+
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < len; i++) {
+            //恢复未搜索状态
+            arr[i] = arr[i].replaceAll(AppConstants.STR_RED, AppConstants.STR_WHITE);
+
+            String text = arr[i].substring(arr[i].lastIndexOf(AppConstants.STR_TAG_SUFFIX) + 1);
+            if (text.contains(sC)) {
+                sb.append(arr[i].replaceAll(AppConstants.STR_WHITE, AppConstants.STR_RED));
+            } else {
+                sb.append(arr[i]);
+            }
+            if (i != len - 1) {
+                sb.append(AppConstants.STR_TAG);
+            }
+        }
+
+        FileUtil.write(mCurHtmlFilePath, sb.toString(), false);
+        Log.e(TAG, "搜索svg完毕");
+        mWebView.loadUrl(AppConstants.URL_HEAD + mCurHtmlFilePath);
     }
 }

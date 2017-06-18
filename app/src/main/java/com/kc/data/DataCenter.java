@@ -27,6 +27,7 @@ public class DataCenter {
     //公共静态变量
     public static int sCurDbIndex = 0;//用户选择的数据库，默认为范庄村。
     public static String sSearchC;
+    public static boolean sHasClearedCurDbCache = false;
 
     private Context mContext;
     //    private DaoSession mDaoSession;

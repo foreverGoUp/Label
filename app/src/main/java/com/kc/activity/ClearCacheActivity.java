@@ -103,6 +103,14 @@ public class ClearCacheActivity extends BaseActivity implements View.OnClickList
     }
 
     private void execClear() {
+        int size0 = mSelPosList.size();
+        for (int i = 0; i < size0; i++) {
+            if (mSelPosList.get(i) == DataCenter.sCurDbIndex) {
+                DataCenter.sHasClearedCurDbCache = true;
+                break;
+            }
+        }
+
         String dir1 = FileUtil.getFilePath(FileUtil.DIR_APP_HTML_PAGE, null);
         Log.e(TAG, "dir1=" + dir1);
         int size = mClearList.size();
